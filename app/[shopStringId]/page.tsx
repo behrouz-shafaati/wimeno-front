@@ -5,6 +5,14 @@ import HorizontalProductList from "../components/product/HorizontalProductList";
 import HorizontalCategoryList from "./components/category/HorizontalCategoryList";
 import ShopHeader from "./components/ShopHeader";
 
+// export async function generateStaticParams() {
+//   const posts = await fetch('https://.../posts').then((res) => res.json())
+
+//   return posts.map((post) => ({
+//     slug: post.slug,
+//   }))
+// }
+
 async function getData({ shopStringId }: { shopStringId: string }) {
   const res = await fetch(
     `${process.env.API_ROOT}/shop?shopStringId=${shopStringId}`,
@@ -25,7 +33,7 @@ async function getData({ shopStringId }: { shopStringId: string }) {
 async function Page({ params }: { params: { shopStringId: string } }) {
   const data = await getData({ shopStringId: params.shopStringId });
   const shop: Shop = data.data[0];
-  const allProduct: Product[] = shop.products;
+  const allProduct: Product[] = shop?.products || [];
 
   const discountedProducts: Product[] = allProduct.filter(
     (product) => product?.priceSale != 0
